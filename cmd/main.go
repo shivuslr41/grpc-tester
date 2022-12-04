@@ -9,13 +9,16 @@ import (
 )
 
 var (
-	serverAddr string
-	endpoint   string
-	protoPath  string
-	protoFile  string
-	enableTLS  bool
-	jsonFile   string
-	help       bool
+	serverAddr    string
+	endpoint      string
+	protoPath     string
+	protoFile     string
+	enableTLS     bool
+	jsonFile      string
+	help          bool
+	data          string
+	streamPayload bool
+	grpcurlFlags  string
 )
 
 func init() {
@@ -27,6 +30,9 @@ func init() {
 		flag.BoolVarP(&enableTLS, "tls", "t", false, "use tls connection")
 		flag.StringVarP(&jsonFile, "json", "j", "", "json file containing test scopes")
 		flag.BoolVarP(&help, "help", "h", false, "shows tool usage")
+		flag.StringVarP(&data, "data", "d", "", "request in json format - '{\"name\":\"Bob\"}'")
+		flag.BoolVarP(&streamPayload, "stream-payload", "m", false, "send multiple messages to server")
+		flag.StringVarP(&data, "grpcurl-flags", "g", "", "pass additional grpcurl flags - '-H Authorization: <TOKEN>'")
 	}
 	flag.Parse()
 }
@@ -71,30 +77,45 @@ func main() {
 	switch command {
 	case "gen":
 		tester.Generate()
+		return
 	case "list":
-		validateLister(lister)
+		validateCommandOptions(lister)
 		lister.Print()
 		return
 	case "run", "test":
+		if jsonFile != "" {
+			command = "test"
+		} else if data == "" {
+			fmt.Println("--data | -d data is given empty!")
+			fmt.Println("--json | -j json file is not provided!")
+			usage()
+			return
+		}
 	default:
 		fmt.Println("given empty/invalid command!")
 		usage()
+		return
 	}
 
-	// TODO impl
+	// construct runner and tester
+	runner := &tester.Runner{
+		Lister:        *lister,
+		Endpoint:      endpoint,
+		StreamPayload: streamPayload,
+		GrpcurlFlags:  grpcurlFlags,
+	}
+	if data != "" {
+		runner.Data = append(runner.Data, data)
+	}
+
 	switch command {
 	case "run":
-		fmt.Println("running", serverAddr)
+		validateCommandOptions(runner)
+		runner.Print()
+		return
 	case "test":
-		fmt.Println("testing", serverAddr)
-	}
-}
-
-// validate user options
-func validateLister(l *tester.Lister) {
-	if l.Server == "" && (l.ProtoPath == "" || l.ProtoFile == "") {
-		fmt.Println("-s | --server is empty!")
-		fmt.Println("-p | --proto-path is empty / -f | --proto-file is empty")
-		usage()
+		endpoints := readJSON(jsonFile)
+		validateCommandOptions(endpoints)
+		tester.RunTests(endpoints)
 	}
 }

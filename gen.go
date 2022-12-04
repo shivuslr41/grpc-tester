@@ -7,8 +7,12 @@ import (
 )
 
 func Generate() {
-	var sampleJSON Tester
-	sampleJSON.Tests = append(sampleJSON.Tests, T{})
+	var sampleJSON []Endpoint
+	sampleJSON = append(sampleJSON, Endpoint{})
+	sampleJSON[0].Tests = append(sampleJSON[0].Tests, T{})
+	var dummyFace []interface{}
+	sampleJSON[0].Tests[0].Request = append(sampleJSON[0].Tests[0].Request, dummyFace)
+	sampleJSON[0].Tests[0].Expect = append(sampleJSON[0].Tests[0].Expect, dummyFace)
 	b, err := json.MarshalIndent(sampleJSON, "", "    ")
 	if err != nil {
 		log.Fatal(err)

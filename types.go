@@ -7,16 +7,30 @@ type Lister struct {
 	TLS       bool   `json:"tls"`
 }
 
-type Runer struct {
+type Runner struct {
 	Lister
-	Endpoint string `json:"endpoint"`
+	Endpoint      string        `json:"endpoint"`
+	Data          []interface{} `json:"-"`
+	GrpcurlFlags  string        `json:"-"`
+	StreamPayload bool          `json:"-"`
 }
 
-type Tester struct {
-	Runer
+type Endpoint struct {
+	Runner
 	Tests []T `json:"tests"`
 }
 
 type T struct {
-	ID string `json:"id"`
+	ID            string        `json:"id"`
+	Description   string        `json:"description"`
+	Request       []interface{} `json:"request"`
+	StreamPayload bool          `json:"stream-payload"`
+	Query         string        `json:"query"`
+	Compare       bool          `json:"compare"`
+	Expect        []interface{} `json:"expect"`
+	Skip          bool          `json:"skip"`
+	Response      []byte        `json:"-"`
+	Print         bool          `json:"print"`
+	GrpcurlFlags  string        `json:"grpcurl-flags"`
+	IgnoreOrder   bool          `json:"ignore-order"`
 }

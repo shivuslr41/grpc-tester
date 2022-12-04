@@ -21,26 +21,38 @@ func (l *Lister) Print() {
 	}
 }
 
-func (l *Lister) List() (map[string][]string, error) {
+func (l *Lister) tlsFlag() string {
 	var tls string
 	if !l.TLS {
 		tls = "--plaintext"
 	}
+	return tls
+}
+
+func (l *Lister) protoFlag() string {
+	var protoOption string
+	if l.ProtoPath != "" {
+		protoOption = fmt.Sprintf("--import-path %s --proto %s", l.ProtoPath, l.ProtoFile)
+	}
+	return protoOption
+}
+
+func (l *Lister) List() (map[string][]string, error) {
 	var server string
 	if l.ProtoPath != "" {
-		server = fmt.Sprintf("--import-path %s --proto %s", l.ProtoPath, l.ProtoFile)
+		server = l.protoFlag()
 	} else {
 		server = l.Server
 	}
 	exe := exec.NewExec()
-	exe.Flags = fmt.Sprintf("%s %s list", tls, server)
+	exe.Flags = fmt.Sprintf("%s %s list", l.tlsFlag(), server)
 	services, err := exe.GetCombinedStdout()
 	if err != nil {
 		return nil, err
 	}
 	servicesAndMethods := make(map[string][]string)
 	for _, service := range services {
-		exe.Flags = fmt.Sprintf("%s %s list %s", tls, server, service)
+		exe.Flags = fmt.Sprintf("%s %s list %s", l.tlsFlag(), server, service)
 		methods, err := exe.GetCombinedStdout()
 		if err != nil {
 			return nil, err

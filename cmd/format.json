@@ -1,0 +1,28 @@
+[
+    {
+        "server": "localhost:8001",
+        "proto_path": "",
+        "proto_file": "",
+        "tls": false,
+        "endpoint": "helloworld.Greeter.SayHello",
+        "tests": [
+            {
+                "id": "hello-1",
+                "description": "test hello world",
+                "request": [
+                    {
+                        "name": "Bob"
+                    }
+                ],
+                "stream-payload": false,
+                "query": "",
+                "compare": false,
+                "expect": null,
+                "skip": false,
+                "print": false,
+                "grpcurl-flags": "",
+                "ignore-order": false
+            }
+        ]
+    }
+]

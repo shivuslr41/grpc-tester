@@ -5,9 +5,8 @@ import (
 )
 
 func (e *Execute) StdinPipe() (io.WriteCloser, error) {
-	cmd := getGrpcurlCmd(e.Flags)
-	e.cmd = cmd
-	return cmd.StdinPipe()
+	e.cmd = getGrpcurlCmd(e.Flags)
+	return e.cmd.StdinPipe()
 }
 
 func (e *Execute) StdoutPipe() (io.ReadCloser, error) {

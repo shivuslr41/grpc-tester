@@ -2,8 +2,19 @@ package exec
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
+
+func (e *Execute) GetStdErr() {
+	//TODO: handle error rather then sending directly to user's terminal
+	e.cmd.Stderr = os.Stderr
+}
+
+func (e *Execute) GetStdout() ([]byte, error) {
+	e.cmd = getCmd(e.Flags)
+	return e.cmd.Output()
+}
 
 func (e *Execute) GetCombinedStdout() ([]string, error) {
 	cmd := getGrpcurlCmd(e.Flags)

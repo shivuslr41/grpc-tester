@@ -32,7 +32,7 @@ func init() {
 		flag.BoolVarP(&help, "help", "h", false, "shows tool usage")
 		flag.StringVarP(&data, "data", "d", "", "request in json format - '{\"name\":\"Bob\"}'")
 		flag.BoolVarP(&streamPayload, "stream-payload", "m", false, "send multiple messages to server")
-		flag.StringVarP(&data, "grpcurl-flags", "g", "", "pass additional grpcurl flags - '-H Authorization: <TOKEN>'")
+		flag.StringVarP(&grpcurlFlags, "grpcurl-flags", "g", "", "pass additional grpcurl flags - '-H \"Authorization: <TOKEN>\"'")
 	}
 	flag.Parse()
 }
@@ -89,12 +89,10 @@ func main() {
 			fmt.Println("--data | -d data is given empty!")
 			fmt.Println("--json | -j json file is not provided!")
 			usage()
-			return
 		}
 	default:
 		fmt.Println("given empty/invalid command!")
 		usage()
-		return
 	}
 
 	// construct runner and tester

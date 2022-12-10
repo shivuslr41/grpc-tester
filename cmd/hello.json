@@ -9,18 +9,18 @@
             {
                 "id": "hello-1",
                 "description": "test hello world",
-                "request": [
+                "requests": [
                     {
                         "name": "Bob"
                     }
                 ],
                 "stream-payload": false,
-                "query": "",
+                "query": null,
                 "compare": false,
-                "expect": null,
+                "expectations": null,
                 "skip": false,
                 "print": false,
-                "grpcurl-flags": "",
+                "grpcurl-flags": "-H \"Authorization: abcd\"",
                 "ignore-order": false
             }
         ]

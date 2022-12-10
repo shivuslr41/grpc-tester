@@ -34,33 +34,30 @@ func (r *Runner) Print() {
 func (r *Runner) write(writer io.WriteCloser) {
 	defer writer.Close()
 	if r.StreamPayload {
-		for i := range r.Data {
-			var iface []interface{}
-			err := json.Unmarshal([]byte(fmt.Sprint(r.Data[i])), &iface)
+		data := r.Data
+		if !r.testerCall {
+			err := json.Unmarshal([]byte(r.Data[0].(string)), &data)
 			if err != nil {
 				log.Fatal(err)
-			}
-			for j := range iface {
-				b, err := json.Marshal(iface[j])
-				if err != nil {
-					log.Fatal(err)
-				}
-				io.WriteString(writer, string(b))
 			}
 		}
-	} else {
-		for i := range r.Data {
-			var iface interface{}
-			err := json.Unmarshal([]byte(fmt.Sprint(r.Data[i])), &iface)
-			if err != nil {
-				log.Fatal(err)
-			}
-			b, err := json.Marshal(iface)
+		for i := range data {
+			b, err := json.Marshal(data[i])
 			if err != nil {
 				log.Fatal(err)
 			}
 			io.WriteString(writer, string(b))
 		}
+	} else {
+		data := fmt.Sprint(r.Data[0])
+		if r.testerCall {
+			b, err := json.Marshal(r.Data[0])
+			if err != nil {
+				panic(err)
+			}
+			data = string(b)
+		}
+		io.WriteString(writer, data)
 	}
 }
 
@@ -77,15 +74,18 @@ func (r *Runner) Run() (io.ReadCloser, error) {
 
 	stderrReader, err := exe.StderrPipe()
 	if err != nil {
+		fmt.Println("stderr", err)
 		return nil, err
 	}
 
 	stdoutReader, err := exe.StdoutPipe()
 	if err != nil {
+		fmt.Println("stdout err", err)
 		return nil, err
 	}
 
 	if err := exe.Start(); err != nil {
+		fmt.Println("start err", err)
 		return nil, err
 	}
 	// for now only check any error at start
@@ -94,7 +94,7 @@ func (r *Runner) Run() (io.ReadCloser, error) {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println("------->", string(b))
+		fmt.Println("stderr ------->", string(b))
 	}()
 	return stdoutReader, nil
 }

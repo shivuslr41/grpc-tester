@@ -5,40 +5,49 @@ import (
 	"fmt"
 	"io"
 	"log"
+
+	"github.com/shivuslr41/grpc-tester/jq"
 )
 
+type Card struct {
+	ID          string        `json:"id"`
+	Description string        `json:"description"`
+	Request     []interface{} `json:"requests"`
+	Response    []interface{} `json:"responses"`
+}
+
 func (t *T) print(req []interface{}) {
-	result := `{
-		"id":"` + t.ID + `",
-		"description":"` + t.Description + `",
-		"request":` + fmt.Sprint(req) + `,
-		"response":` + string(t.Response) + `,
-	}`
-	b, err := json.MarshalIndent(result, "", "  ")
+	str := jq.Format(string(t.Response))
+	var istr []interface{}
+	err := json.Unmarshal([]byte(str), &istr)
 	if err != nil {
-		fmt.Println("response:", string(t.Response))
-		log.Fatal(err)
+		panic(err)
+	}
+	card := Card{
+		ID:          t.ID,
+		Description: t.Description,
+		Request:     req,
+		Response:    istr,
+	}
+	b, err := json.MarshalIndent(card, "", "  ")
+	if err != nil {
+		panic(err)
 	}
 	fmt.Println(string(b))
-	// fmt.Println("----------------------------------------------------------")
-	// fmt.Println("ID:", t.ID)
-	// fmt.Println("Description", t.Description)
-	// fmt.Printf("Request:\n%s\n", req)
-	// fmt.Printf("Response:\n%s\n", t.Response)
-	// fmt.Println("----------------------------------------------------------")
 }
 
 func (t *T) test(e *Endpoint) error {
 	if t.Skip {
 		return nil
 	}
+	e.testerCall = true
 	e.Data = t.Request
 	e.StreamPayload = t.StreamPayload
+	e.GrpcurlFlags = t.GrpcurlFlags
 	reader, err := e.Run()
 	if err != nil {
 		return err
 	}
-	// some error here at readall - invalid character 'm' looking for beginning of value
 	t.Response, err = io.ReadAll(reader)
 	if err != nil {
 		return err

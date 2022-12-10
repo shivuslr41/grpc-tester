@@ -13,6 +13,7 @@ type Runner struct {
 	Data          []interface{} `json:"-"`
 	GrpcurlFlags  string        `json:"-"`
 	StreamPayload bool          `json:"-"`
+	testerCall    bool
 }
 
 type Endpoint struct {
@@ -23,11 +24,11 @@ type Endpoint struct {
 type T struct {
 	ID            string        `json:"id"`
 	Description   string        `json:"description"`
-	Request       []interface{} `json:"request"`
+	Request       []interface{} `json:"requests"`
 	StreamPayload bool          `json:"stream-payload"`
-	Query         string        `json:"query"`
+	Query         []string      `json:"query"`
 	Compare       bool          `json:"compare"`
-	Expect        []interface{} `json:"expect"`
+	Expectations  []interface{} `json:"expectations"`
 	Skip          bool          `json:"skip"`
 	Response      []byte        `json:"-"`
 	Print         bool          `json:"print"`

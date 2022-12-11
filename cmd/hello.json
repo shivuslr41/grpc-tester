@@ -4,7 +4,7 @@
         "proto_path": "",
         "proto_file": "",
         "tls": false,
-        "endpoint": "helloworld.Greeter.SayHello",
+        "endpoint": "helloworld.Greeter.SayHelloStream",
         "tests": [
             {
                 "id": "hello-1",
@@ -12,16 +12,28 @@
                 "requests": [
                     {
                         "name": "Bob"
+                    },
+                    {
+                        "name": "Alice"
                     }
                 ],
-                "stream-payload": false,
-                "query": null,
-                "compare": false,
-                "expectations": null,
+                "stream-payload": true,
+                "queries": [
+                    "'.'"
+                ],
+                "compare": true,
+                "expectations": [
+                    {
+                        "message": "Alice World!"
+                    },
+                    {
+                        "message": "Bob World!"
+                    }
+                ],
                 "skip": false,
-                "print": false,
+                "print": true,
                 "grpcurl-flags": "-H \"Authorization: abcd\"",
-                "ignore-order": false
+                "ignore-order": true
             }
         ]
     }

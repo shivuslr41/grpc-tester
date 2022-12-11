@@ -80,7 +80,7 @@ func main() {
 		return
 	case "list":
 		validateCommandOptions(lister)
-		lister.Print()
+		lister.Execute()
 		return
 	case "run", "test":
 		if jsonFile != "" {
@@ -109,11 +109,11 @@ func main() {
 	switch command {
 	case "run":
 		validateCommandOptions(runner)
-		runner.Print()
+		runner.Execute()
 		return
 	case "test":
 		endpoints := readJSON(jsonFile)
 		validateCommandOptions(endpoints)
-		tester.RunTests(endpoints)
+		tester.Execute(endpoints)
 	}
 }

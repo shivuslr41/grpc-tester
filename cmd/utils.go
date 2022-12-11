@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 
 	tester "github.com/shivuslr41/grpc-tester"
@@ -12,11 +11,11 @@ import (
 func readJSON(filename string) []tester.Endpoint {
 	b, err := os.ReadFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		printErrAndExit(err)
 	}
 	var endpoints []tester.Endpoint
 	if err = json.Unmarshal(b, &endpoints); err != nil {
-		log.Fatal(err)
+		printErrAndExit(err)
 	}
 	return endpoints
 }
@@ -39,11 +38,12 @@ func validateCommandOptions(o interface{}) {
 		}
 	case []tester.Endpoint:
 		if len(op) == 0 || len(op[0].Tests) == 0 {
-			fmt.Println("invalid json, no tests/requests provided!")
+			fmt.Print("invalid json, no tests/requests provided!")
 			os.Exit(0)
 		}
 	default:
-		log.Fatal("invalid command type")
+		fmt.Println("invalid command type")
+		usage()
 	}
 }
 
@@ -54,4 +54,9 @@ func isAnyOfEmpty(svr, pp, pf string) bool {
 		return true
 	}
 	return false
+}
+
+func printErrAndExit(err error) {
+	fmt.Print(err)
+	os.Exit(1)
 }

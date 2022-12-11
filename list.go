@@ -2,40 +2,10 @@ package tester
 
 import (
 	"fmt"
-	"log"
+	"strings"
 
 	"github.com/shivuslr41/grpc-tester/exec"
 )
-
-func (l *Lister) Print() {
-	sm, err := l.List()
-	if err != nil {
-		log.Fatal(err)
-	}
-	for s, m := range sm {
-		fmt.Println("----------------<", s, ">-----------------")
-		for i := range m {
-			fmt.Println("----->", m[i])
-		}
-		fmt.Println()
-	}
-}
-
-func (l *Lister) tlsFlag() string {
-	var tls string
-	if !l.TLS {
-		tls = "--plaintext"
-	}
-	return tls
-}
-
-func (l *Lister) protoFlag() string {
-	var protoOption string
-	if l.ProtoPath != "" {
-		protoOption = fmt.Sprintf("--import-path %s --proto %s", l.ProtoPath, l.ProtoFile)
-	}
-	return protoOption
-}
 
 func (l *Lister) List() (map[string][]string, error) {
 	var server string
@@ -44,20 +14,31 @@ func (l *Lister) List() (map[string][]string, error) {
 	} else {
 		server = l.Server
 	}
-	exe := exec.NewExec()
-	exe.Flags = fmt.Sprintf("%s %s list", l.tlsFlag(), server)
-	services, err := exe.GetCombinedStdout()
+	b, err := exec.NewCMD(
+		fmt.Sprintf("grpcurl %s %s list",
+			l.tlsFlag(), server,
+		),
+	).CombinedOutput()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s", string(b))
 	}
 	servicesAndMethods := make(map[string][]string)
-	for _, service := range services {
-		exe.Flags = fmt.Sprintf("%s %s list %s", l.tlsFlag(), server, service)
-		methods, err := exe.GetCombinedStdout()
+	for _, service := range removeEmptyStrings(strings.Split(string(b), "\n")) {
+		b, err = exec.NewCMD(
+			fmt.Sprintf("grpcurl %s %s list %s",
+				l.tlsFlag(),
+				server,
+				service,
+			),
+		).CombinedOutput()
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("%s", string(b))
 		}
-		servicesAndMethods[service] = methods
+		servicesAndMethods[service] = removeEmptyStrings(strings.Split(string(b), "\n"))
 	}
 	return servicesAndMethods, nil
+}
+
+func (l *Lister) Execute() {
+	l.print()
 }

@@ -26,7 +26,7 @@ type T struct {
 	Description   string        `json:"description"`
 	Request       []interface{} `json:"requests"`
 	StreamPayload bool          `json:"stream-payload"`
-	Query         []string      `json:"query"`
+	Queries         []string      `json:"queries"`
 	Compare       bool          `json:"compare"`
 	Expectations  []interface{} `json:"expectations"`
 	Skip          bool          `json:"skip"`

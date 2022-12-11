@@ -2,7 +2,6 @@ package tester
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 )
 
@@ -15,10 +14,10 @@ func Generate() {
 	sampleJSON[0].Tests[0].Expectations = append(sampleJSON[0].Tests[0].Expectations, dummyFace)
 	b, err := json.MarshalIndent(sampleJSON, "", "    ")
 	if err != nil {
-		log.Fatal(err)
+		printErrAndExit(err)
 	}
 	err = os.WriteFile("format.json", b, 0644)
 	if err != nil {
-		log.Fatal(err)
+		printErrAndExit(err)
 	}
 }

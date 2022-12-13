@@ -24,14 +24,14 @@ type Endpoint struct {
 type T struct {
 	ID            string        `json:"id"`
 	Description   string        `json:"description"`
-	Request       []interface{} `json:"requests"`
-	StreamPayload bool          `json:"stream-payload"`
-	Queries         []string      `json:"queries"`
+	Request       []interface{} `json:"request"`
+	StreamPayload bool          `json:"stream_payload"`
+	Queries       []string      `json:"queries"`
 	Compare       bool          `json:"compare"`
-	Expectations  []interface{} `json:"expectations"`
+	Expectations  []interface{} `json:"expectation"`
 	Skip          bool          `json:"skip"`
 	Response      []byte        `json:"-"`
 	Print         bool          `json:"print"`
-	GrpcurlFlags  string        `json:"grpcurl-flags"`
-	IgnoreOrder   bool          `json:"ignore-order"`
+	GrpcurlFlags  string        `json:"grpcurl_flags"`
+	IgnoreOrder   bool          `json:"ignore_order"`
 }

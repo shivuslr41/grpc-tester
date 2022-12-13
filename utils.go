@@ -7,23 +7,21 @@ import (
 )
 
 func (l *Lister) tlsFlag() string {
-	var tls string
-	if !l.TLS {
-		tls = "--plaintext"
+	if l.TLS {
+		return ""
 	}
-	return tls
+	return "--plaintext"
 }
 
 func (l *Lister) protoFlag() string {
-	var protoOption string
 	if l.ProtoPath != "" {
-		protoOption = fmt.Sprintf(
+		return fmt.Sprintf(
 			"--import-path %s --proto %s",
 			l.ProtoPath,
 			l.ProtoFile,
 		)
 	}
-	return protoOption
+	return ""
 }
 
 func removeEmptyStrings(s []string) []string {
@@ -36,7 +34,7 @@ func removeEmptyStrings(s []string) []string {
 	return ss
 }
 
-func readErr(rc io.ReadCloser) error {
+func readStdErr(rc io.ReadCloser) error {
 	b, err := io.ReadAll(rc)
 	if err != nil {
 		return err

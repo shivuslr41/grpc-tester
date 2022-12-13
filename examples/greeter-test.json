@@ -1,0 +1,136 @@
+[
+    {
+        "server": "localhost:8001",
+        "endpoint": "greeter.Greeter.SayHello",
+        "tests": [
+            {
+                "id": "sayhello-1",
+                "description": "print hello world",
+                "request": [
+                    {
+                        "name": "World"
+                    }
+                ],
+                "print": true,
+                "grpcurl_flags": "-emit-defaults -H \"Authorization: abcd\""
+            },
+            {
+                "id": "sayhello-2",
+                "description": "test hello world",
+                "request": [
+                    {
+                        "name": "World"
+                    }
+                ],
+                "compare": true,
+                "expectation": [
+                    {
+                        "message": "Hello World!"
+                    }
+                ]
+            },
+            {
+                "id": "sayhello-3",
+                "description": "test hello world with filters",
+                "request": [
+                    {
+                        "name": "World"
+                    }
+                ],
+                "compare": true,
+                "queries": [
+                    "'[.[].message']"
+                ],
+                "expectation": [
+                    "Hello World!"
+                ]
+            },
+            {
+                "id": "sayhello-skip",
+                "description": "skip this test",
+                "request": [
+                    {
+                        "name": "World"
+                    }
+                ],
+                "compare": true,
+                "queries": [
+                    "'.[].message'",
+                    "[.]"
+                ],
+                "expectation": [
+                    "Hello World!"
+                ],
+                "skip": true
+            }
+        ]
+    },
+    {
+        "server": "localhost:8001",
+        "endpoint": "greeter.Greeter.SayHelloStream",
+        "tests": [
+            {
+                "id": "sayhellostream-1",
+                "description": "print hello world and earth",
+                "request": [
+                    {
+                        "name": "World"
+                    },
+                    {
+                        "name": "Earth"
+                    }
+                ],
+                "stream_payload": true,
+                "print": true
+            },
+            {
+                "id": "sayhellostream-2",
+                "description": "test hello world and earth",
+                "request": [
+                    {
+                        "name": "World"
+                    },
+                    {
+                        "name": "Earth"
+                    }
+                ],
+                "stream_payload": true,
+                "compare": true,
+                "expectation": [
+                    {
+                        "message": "Hello Earth!"
+                    },
+                    {
+                        "message": "Hello World!"
+                    }
+                ],
+                "ignore_order": true
+            },
+            {
+                "id": "sayhellostream-3",
+                "description": "test hello world and earth with filters, capture all stream messages in an \"messages\" array",
+                "request": [
+                    {
+                        "name": "World"
+                    },
+                    {
+                        "name": "Earth"
+                    }
+                ],
+                "stream_payload": true,
+                "compare": true,
+                "queries": [
+                    "'[.[].message] | [{messages: .}]'"
+                ],
+                "expectation": [
+                    {
+                        "messages": [
+                            "Hello World!",
+                            "Hello Earth!"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

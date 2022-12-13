@@ -30,6 +30,10 @@ func (t *T) compare() error {
 		}
 	}
 
+	// TODO: print if debug enabled.
+	// fmt.Println(filteredResult)
+	// fmt.Println(expect)
+
 	pass, err := jq.Compare(filteredResult, expect, t.IgnoreOrder)
 	if err != nil {
 		return err

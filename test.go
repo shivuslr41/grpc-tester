@@ -1,6 +1,7 @@
 package tester
 
 import (
+	"fmt"
 	"io"
 )
 
@@ -37,6 +38,7 @@ func (t *T) test(e *Endpoint) error {
 		}
 	}
 
+	fmt.Println("                                   -----------------------------------")
 	return nil
 }
 
@@ -55,5 +57,6 @@ func Execute(endpoints []Endpoint) {
 		if err := endpoints[i].Test(); err != nil {
 			printErrAndExit(err)
 		}
+		fmt.Println("                                   ===================================")
 	}
 }

@@ -15,8 +15,10 @@ func (l *Lister) List() (map[string][]string, error) {
 		server = l.Server
 	}
 	b, err := exec.NewCMD(
-		fmt.Sprintf("grpcurl %s %s list",
-			l.tlsFlag(), server,
+		fmt.Sprintf(
+			"grpcurl %s %s list",
+			l.tlsFlag(),
+			server,
 		),
 	).CombinedOutput()
 	if err != nil {
@@ -25,7 +27,8 @@ func (l *Lister) List() (map[string][]string, error) {
 	servicesAndMethods := make(map[string][]string)
 	for _, service := range removeEmptyStrings(strings.Split(string(b), "\n")) {
 		b, err = exec.NewCMD(
-			fmt.Sprintf("grpcurl %s %s list %s",
+			fmt.Sprintf(
+				"grpcurl %s %s list %s",
 				l.tlsFlag(),
 				server,
 				service,

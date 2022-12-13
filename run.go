@@ -38,7 +38,7 @@ func (r *Runner) Run(reader func(io.ReadCloser) error) error {
 	}
 
 	g.Go(func() error {
-		return readErr(stderrReader)
+		return readStdErr(stderrReader)
 	})
 
 	stdoutReader, err := cmd.StdoutPipe()

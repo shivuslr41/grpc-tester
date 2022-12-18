@@ -4,16 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-
-	"github.com/shivuslr41/grpc-tester/jq"
 )
-
-type Card struct {
-	ID          string        `json:"id"`
-	Description string        `json:"description"`
-	Request     []interface{} `json:"requests"`
-	Response    []interface{} `json:"responses"`
-}
 
 func (l *Lister) print() {
 	sm, err := l.List()
@@ -30,12 +21,11 @@ func (l *Lister) print() {
 }
 
 func (r *Runner) print() {
-	err := r.Run(func(rc io.ReadCloser) error {
+	if err := r.Run(func(rc io.ReadCloser) error {
 		var out interface{}
 		decoder := json.NewDecoder(rc)
 		for decoder.More() {
-			err := decoder.Decode(&out)
-			if err != nil {
+			if err := decoder.Decode(&out); err != nil {
 				return err
 			}
 			b, err := json.MarshalIndent(out, "", "  ")
@@ -45,34 +35,23 @@ func (r *Runner) print() {
 			fmt.Println(string(b))
 		}
 		return nil
-	})
-	if err != nil {
+	}); err != nil {
 		printErrAndExit(err)
 	}
 }
 
-func (t *T) print(req []interface{}) {
-	str, err := jq.Format(string(t.Response))
-	if err != nil {
-		printErrAndExit(err)
-	}
-	var istr []interface{}
-	err = json.Unmarshal([]byte(str), &istr)
-	if err != nil {
-		printErrAndExit(err)
-	}
-	b, err := json.MarshalIndent(
-		Card{
-			ID:          t.ID,
-			Description: t.Description,
-			Request:     req,
-			Response:    istr,
-		},
-		"",
-		"  ",
-	)
+func (t *T) print() {
+	b, err := json.MarshalIndent(t, "", "  ")
 	if err != nil {
 		printErrAndExit(err)
 	}
 	fmt.Println(string(b))
+	if !t.Skip && t.Compare {
+		if t.Pass {
+			fmt.Println("PASS |", t.ID, "|", t.Description)
+		} else {
+			fmt.Println("FAIL |", t.ID, "|", t.Description)
+		}
+	}
+	fmt.Println("                                   -----------------------------------")
 }

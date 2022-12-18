@@ -1,9 +1,12 @@
 package tester
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
+
+	"github.com/shivuslr41/grpc-tester/jq"
 )
 
 func (l *Lister) tlsFlag() string {
@@ -48,4 +51,12 @@ func readStdErr(rc io.ReadCloser) error {
 func printErrAndExit(err error) {
 	fmt.Print(err)
 	os.Exit(1)
+}
+
+func (t *T) format(b []byte) error {
+	str, err := jq.Format(string(b))
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal([]byte(str), &t.Response)
 }

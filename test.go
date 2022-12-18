@@ -5,56 +5,51 @@ import (
 	"io"
 )
 
-func (t *T) test(e *Endpoint) error {
+func (t *T) Test(r Runner) error {
 	if t.Skip {
 		return nil
 	}
 
-	e.testerCall = true
-	e.Data = t.Request
-	e.StreamPayload = t.StreamPayload
-	e.GrpcurlFlags = t.GrpcurlFlags
+	r.testerCall = true
+	r.Data = t.Request
+	r.GrpcurlFlags = t.GrpcurlFlags
 
-	err := e.Run(func(rc io.ReadCloser) error {
+	err := r.Run(func(rc io.ReadCloser) error {
 		b, err := io.ReadAll(rc)
 		if err != nil {
 			return err
 		}
-		t.Response = b
+		// format response
+		err = t.format(b)
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {
-		return err
-	}
-
-	if t.Print {
-		t.print(e.Data)
+		return nil
 	}
 
 	if t.Compare {
-		err = t.compare()
-		if err != nil {
-			return err
-		}
+		return t.compare()
 	}
 
-	fmt.Println("                                   -----------------------------------")
+	if t.Print {
+		t.print()
+	}
 	return nil
 }
 
-func (e *Endpoint) Test() error {
+func (e *Endpoint) test() error {
 	for i := range e.Tests {
-		err := e.Tests[i].test(e)
-		if err != nil {
-			return err
-		}
+		return e.Tests[i].Test(e.Runner)
 	}
 	return nil
 }
 
 func Execute(endpoints []Endpoint) {
 	for i := range endpoints {
-		if err := endpoints[i].Test(); err != nil {
+		if err := endpoints[i].test(); err != nil {
 			printErrAndExit(err)
 		}
 		fmt.Println("                                   ===================================")

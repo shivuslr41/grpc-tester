@@ -68,6 +68,7 @@
     {
         "server": "localhost:8001",
         "endpoint": "greeter.Greeter.SayHelloStream",
+        "stream_payload": true,
         "tests": [
             {
                 "id": "sayhellostream-1",
@@ -80,7 +81,6 @@
                         "name": "Earth"
                     }
                 ],
-                "stream_payload": true,
                 "print": true
             },
             {
@@ -94,7 +94,6 @@
                         "name": "Earth"
                     }
                 ],
-                "stream_payload": true,
                 "compare": true,
                 "expectation": [
                     {
@@ -117,7 +116,6 @@
                         "name": "Earth"
                     }
                 ],
-                "stream_payload": true,
                 "compare": true,
                 "queries": [
                     "'[.[].message] | [{messages: .}]'"

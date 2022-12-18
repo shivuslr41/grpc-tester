@@ -2,24 +2,23 @@ package tester
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/shivuslr41/grpc-tester/jq"
 )
 
 func (t *T) compare() error {
-	result, err := jq.Format(string(t.Response))
+	b, err := json.Marshal(t.Response)
 	if err != nil {
 		return err
 	}
+	filteredResult := string(b)
 
-	b, err := json.Marshal(t.Expectations)
+	b, err = json.Marshal(t.Expectations)
 	if err != nil {
 		return err
 	}
 	expect := string(b)
 
-	filteredResult := result
 	if len(t.Queries) == 0 {
 		t.Queries = append(t.Queries, "'.'")
 	}
@@ -34,15 +33,6 @@ func (t *T) compare() error {
 	// fmt.Println(filteredResult)
 	// fmt.Println(expect)
 
-	pass, err := jq.Compare(filteredResult, expect, t.IgnoreOrder)
-	if err != nil {
-		return err
-	}
-
-	if pass {
-		fmt.Println("PASS |", t.ID, "|", t.Description)
-	} else {
-		fmt.Println("FAIL |", t.ID, "|", t.Description)
-	}
-	return nil
+	t.Pass, err = jq.Compare(filteredResult, expect, t.IgnoreOrder)
+	return err
 }

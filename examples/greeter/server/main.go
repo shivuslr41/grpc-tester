@@ -18,10 +18,6 @@ type server struct {
 	greeterpb.UnimplementedGreeterServer
 }
 
-func NewServer() *server {
-	return &server{}
-}
-
 func (s *server) SayHello(ctx context.Context, in *greeterpb.HelloRequest) (*greeterpb.HelloReply, error) {
 	if in.GetName() == "" {
 		return nil, status.Errorf(codes.NotFound, "%s", "name not found")

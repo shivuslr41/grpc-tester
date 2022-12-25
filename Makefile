@@ -1,8 +1,11 @@
 fmt:
 	@go fmt ./...
 
+lint:
+	@go install golang.org/x/lint/golint@latest && golint ./...
+
 build:
-	@go build -o grpctester cmd/*
+	@go build -o grpc-tester cmd/grpc-tester/*
 
 test:
-	./grpctester test -j examples/greeter-test.json
+	./grpc-tester test -j examples/greeter-test.json

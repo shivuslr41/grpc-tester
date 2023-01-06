@@ -24,10 +24,10 @@ type Endpoint struct {
 type T struct {
 	ID           string        `json:"id"`
 	Description  string        `json:"description"`
-	Request      []interface{} `json:"request"`
-	Queries      []string      `json:"queries"`
+	Requests     []interface{} `json:"requests"`
+	Queries      []string      `json:"jqq"`
 	Compare      bool          `json:"compare"`
-	Expectations []interface{} `json:"expectation"`
+	Expectations []interface{} `json:"expectations"`
 	Skip         bool          `json:"skip"`
 	Response     []interface{} `json:"-"`
 	Print        bool          `json:"print"`

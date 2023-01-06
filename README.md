@@ -1,12 +1,14 @@
 # grpc-tester
 
-`grpc-tester` is a simple command-line tool cum library for testing gRPC services.
+`grpc-tester` is a simple go-lib and command-line tool for testing gRPC services.
 
-This tool leverage [grpcurl](https://github.com/fullstorydev/grpcurl) to create dynamic requests and [jq](https://github.com/stedolan/jq) for comparing/validating responses.
+Tool leverages [grpcurl](https://github.com/fullstorydev/grpcurl) to execute gRPC requests and [jq](https://github.com/stedolan/jq) for filtering and validating responses.
 
-NOTE: currently doesn't work on windows cmd/powershell.
+NOTE: Doesn't work on windows cmd/powershell.
 
-DOCUMENTATION is work in progress, have a look at `examples/` to get overview of tool usage!
+### Prerequisites
+- [grpcurl](https://github.com/fullstorydev/grpcurl#installation)
+- [jq](https://stedolan.github.io/jq/download/)
 
 ### Install From Source
 ```shell
@@ -26,11 +28,11 @@ EXAMPLE:
 COMMANDS:
         gen             generates sample json.
         list            list services and methods.
-        run             run requests provided in json.
-        test            test responses againt expectation set.
+        run             run executes requests provided in json or via -d flag.
+        test            test responses againt expectations set.
 
 Usage of ./grpc-tester:
-  -d, --data string            request in json format - '{"name":"Bob"}'
+  -d, --data string            request in json format - '{"name":"Ramesh"}'
   -e, --endpoint string        service and method to call
   -g, --grpcurl-flags string   pass additional grpcurl flags - '-H "Authorization: <TOKEN>"'
   -h, --help                   shows tool usage
@@ -44,7 +46,68 @@ Usage of ./grpc-tester:
 
 ## Examples
 ### gen
-This generates json format file, add scopes and pass it to grpc-tester run/test commands.
+generates json file for the reference.
 ```shell
 grpc-tester gen 
 ```
+
+### list
+lists all avaiable services and methods on a given server.
+```shell
+grpc-tester list -s localhost:8001
+```
+use `-t`/`--tls` for secure server connections.
+```shell
+grpc-tester list -ts myserver:443
+```
+
+### run
+executes requests provided via `-d`/`--data` flag. multiple requests can be executed by providing them in json file's `tests` property (set `compare` as false and `print` as true for each test cases to make them just run cases).
+```shell
+grpc-tester run -s localhost:8001 -d '{"name":"Ramesh"}'
+```
+streaming payload can be provided by using `-m`/`--stream-payload` flag and enclosing multiple stream requests in `[]`.
+```shell
+grpc-tester run -s localhost:8001 -d '[{"name":"Ramesh"},{"name":"Suresh"}]' -m
+```
+
+### test
+validate responses against set expectations in the json file after filtering the responses by the given `jq` queires in the json file via `jqq` property. refer `examples/greeter-test.json` for more details.
+```shell
+grpc-tester test -j examples/greeter-test.json
+```
+
+## JSON format
+```json
+[
+    {
+        "server": "",
+        "proto_path": "",
+        "proto_file": "",
+        "tls": false,
+        "endpoint": "",
+        "stream_payload": false,
+        "tests": [
+            {
+                "id": "",
+                "description": "",
+                "requests": [
+                    {}
+                ],
+                "jqq": [
+                    ""
+                ],
+                "compare": false,
+                "expectations": [
+                    {}
+                ],
+                "skip": false,
+                "print": false,
+                "grpcurl_flags": "",
+                "ignore_order": false
+            }
+        ]
+    }
+]
+```
+TODO: add json details.

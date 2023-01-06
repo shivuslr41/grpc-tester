@@ -6,7 +6,7 @@
             {
                 "id": "sayhello-1",
                 "description": "print hello world",
-                "request": [
+                "requests": [
                     {
                         "name": "World"
                     }
@@ -17,13 +17,13 @@
             {
                 "id": "sayhello-2",
                 "description": "test hello world",
-                "request": [
+                "requests": [
                     {
                         "name": "World"
                     }
                 ],
                 "compare": true,
-                "expectation": [
+                "expectations": [
                     {
                         "message": "Hello World!"
                     }
@@ -32,33 +32,33 @@
             {
                 "id": "sayhello-3",
                 "description": "test hello world with filters",
-                "request": [
+                "requests": [
                     {
                         "name": "World"
                     }
                 ],
                 "compare": true,
-                "queries": [
+                "jqq": [
                     "'[.[].message']"
                 ],
-                "expectation": [
+                "expectations": [
                     "Hello World!"
                 ]
             },
             {
                 "id": "sayhello-skip",
-                "description": "skip this test",
-                "request": [
+                "description": "skip this test, since this is same as above one!",
+                "requests": [
                     {
                         "name": "World"
                     }
                 ],
                 "compare": true,
-                "queries": [
+                "jqq": [
                     "'.[].message'",
                     "[.]"
                 ],
-                "expectation": [
+                "expectations": [
                     "Hello World!"
                 ],
                 "skip": true
@@ -73,7 +73,7 @@
             {
                 "id": "sayhellostream-1",
                 "description": "print hello world and earth",
-                "request": [
+                "requests": [
                     {
                         "name": "World"
                     },
@@ -86,7 +86,7 @@
             {
                 "id": "sayhellostream-2",
                 "description": "test hello world and earth",
-                "request": [
+                "requests": [
                     {
                         "name": "World"
                     },
@@ -95,7 +95,7 @@
                     }
                 ],
                 "compare": true,
-                "expectation": [
+                "expectations": [
                     {
                         "message": "Hello Earth!"
                     },
@@ -108,7 +108,7 @@
             {
                 "id": "sayhellostream-3",
                 "description": "test hello world and earth with filters, capture all stream messages in an \"messages\" array",
-                "request": [
+                "requests": [
                     {
                         "name": "World"
                     },
@@ -117,10 +117,10 @@
                     }
                 ],
                 "compare": true,
-                "queries": [
+                "jqq": [
                     "'[.[].message] | [{messages: .}]'"
                 ],
-                "expectation": [
+                "expectations": [
                     {
                         "messages": [
                             "Hello World!",

@@ -1,7 +1,6 @@
 package tester
 
 import (
-	"fmt"
 	"io"
 )
 
@@ -11,7 +10,7 @@ func (t *T) Test(r Runner) error {
 	}
 
 	r.testerCall = true
-	r.Data = t.Request
+	r.Data = t.Requests
 	r.GrpcurlFlags = t.GrpcurlFlags
 
 	err := r.Run(func(rc io.ReadCloser) error {
@@ -27,7 +26,7 @@ func (t *T) Test(r Runner) error {
 		return nil
 	})
 	if err != nil {
-		return nil
+		return err
 	}
 
 	if t.Compare {
@@ -42,7 +41,9 @@ func (t *T) Test(r Runner) error {
 
 func (e *Endpoint) test() error {
 	for i := range e.Tests {
-		return e.Tests[i].Test(e.Runner)
+		if err := e.Tests[i].Test(e.Runner); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -52,6 +53,5 @@ func Execute(endpoints []Endpoint) {
 		if err := endpoints[i].test(); err != nil {
 			printErrAndExit(err)
 		}
-		fmt.Println("                                   ===================================")
 	}
 }

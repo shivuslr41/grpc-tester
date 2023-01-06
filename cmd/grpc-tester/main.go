@@ -30,7 +30,7 @@ func init() {
 		flag.BoolVarP(&enableTLS, "tls", "t", false, "use tls connection")
 		flag.StringVarP(&jsonFile, "json", "j", "", "json file containing test scopes")
 		flag.BoolVarP(&help, "help", "h", false, "shows tool usage")
-		flag.StringVarP(&data, "data", "d", "", "request in json format - '{\"name\":\"Bob\"}'")
+		flag.StringVarP(&data, "data", "d", "", "request in json format - '{\"name\":\"Ramesh\"}'")
 		flag.BoolVarP(&streamPayload, "stream-payload", "m", false, "send multiple messages to server")
 		flag.StringVarP(&grpcurlFlags, "grpcurl-flags", "g", "", "pass additional grpcurl flags - '-H \"Authorization: <TOKEN>\"'")
 	}
@@ -48,8 +48,8 @@ EXAMPLE:
 COMMANDS:
 	gen		generates sample json.
 	list		list services and methods.
-	run		run requests provided in json.
-	test		test responses againt expectation set.
+	run		run executes requests provided in json or via -d flag.
+	test		test responses againt expectations set.
 `
 	fmt.Println(details)
 	flag.Usage()

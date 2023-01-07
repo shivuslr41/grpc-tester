@@ -10,6 +10,10 @@ import (
 )
 
 func (r *Runner) Run(reader func(io.ReadCloser) error) error {
+	if GConf.Use {
+		r.replaceGconf()
+	}
+
 	cmd := exec.NewCMD(
 		fmt.Sprintf(
 			"grpcurl %s %s %s -d @ %s %s",

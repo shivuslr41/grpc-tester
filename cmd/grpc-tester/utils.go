@@ -24,15 +24,18 @@ func readJSON(filename string) []tester.Endpoint {
 func validateCommandOptions(o interface{}) {
 	switch op := o.(type) {
 	case *tester.Lister:
-		if isAnyOfEmpty(op.Server, op.ProtoPath, op.ProtoFile) {
+		if op.Server == "" && (op.ProtoPath == "" || op.ProtoFile == "") {
+			fmt.Println("-s | --server address is not provided!")
+			fmt.Println("                       OR")
+			fmt.Println("-p | --proto-path is empty / -f | --proto-file is empty")
 			usage()
 		}
 	case *tester.Runner:
-		if len(op.Data) == 0 {
-			if isAnyOfEmpty(op.Server, op.ProtoPath, op.ProtoFile) {
-				usage()
-			}
-		} else if op.Endpoint == "" {
+		if op.Server == "" {
+			fmt.Println("-s | --server address is not provided!")
+			usage()
+		}
+		if op.Endpoint == "" {
 			fmt.Println("--endpoint | -e is not provided!")
 			usage()
 		}
@@ -45,15 +48,6 @@ func validateCommandOptions(o interface{}) {
 		fmt.Println("invalid command type")
 		usage()
 	}
-}
-
-func isAnyOfEmpty(svr, pp, pf string) bool {
-	if svr == "" && (pp == "" || pf == "") {
-		fmt.Println("-s | --server is empty!")
-		fmt.Println("-p | --proto-path is empty / -f | --proto-file is empty")
-		return true
-	}
-	return false
 }
 
 func printErrAndExit(err error) {

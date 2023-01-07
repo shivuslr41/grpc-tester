@@ -20,10 +20,10 @@ go install github.com/shivuslr41/grpc-tester/cmd/grpc-tester@v0.1.0-beta
 $ grpc-tester --help
 
 FORMAT:
-        ./tester [COMMAND] [FLAGS]
+        ./grpc-tester [COMMAND] [FLAGS]
 
 EXAMPLE:
-        ./tester list --server mygrpcserver:443 --tls
+        ./grpc-tester list --server mygrpcserver:443 --tls
 
 COMMANDS:
         gen             generates sample json.
@@ -32,15 +32,18 @@ COMMANDS:
         test            test responses againt expectations set.
 
 Usage of ./grpc-tester:
+  -c, --compare                test/compare responses
   -d, --data string            request in json format - '{"name":"Ramesh"}'
   -e, --endpoint string        service and method to call
+  -G, --global                 consider global flags for run/test commands
   -g, --grpcurl-flags string   pass additional grpcurl flags - '-H "Authorization: <TOKEN>"'
   -h, --help                   shows tool usage
   -j, --json string            json file containing test scopes
+  -P, --print                  prints result
   -f, --proto-file string      proto file
   -p, --proto-path string      proto path, if server doesn't support grpc reflection
   -s, --server string          gRPC server address
-  -m, --stream-payload         send multiple messages to server
+  -S, --stream-payload         send multiple messages to server
   -t, --tls                    use tls connection
 ```
 
@@ -66,9 +69,9 @@ executes requests provided via `-d`/`--data` flag. multiple requests can be exec
 ```shell
 grpc-tester run -s localhost:8001 -d '{"name":"Ramesh"}'
 ```
-streaming payload can be provided by using `-m`/`--stream-payload` flag and enclosing multiple stream requests in `[]`.
+streaming payload can be provided by using `-S`/`--stream-payload` flag and enclosing multiple stream requests in `[]`.
 ```shell
-grpc-tester run -s localhost:8001 -d '[{"name":"Ramesh"},{"name":"Suresh"}]' -m
+grpc-tester run -s localhost:8001 -d '[{"name":"Ramesh"},{"name":"Suresh"}]' -S
 ```
 
 ### test

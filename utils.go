@@ -27,6 +27,23 @@ func (l *Lister) protoFlag() string {
 	return ""
 }
 
+func (r *Runner) replaceGconf() {
+	if GConf.Server != "" {
+		r.Server = GConf.Server
+	}
+	if GConf.Endpoint != "" {
+		r.Endpoint = GConf.Endpoint
+	}
+	if GConf.ProtoPath != "" {
+		r.ProtoPath = GConf.ProtoPath
+	}
+	if GConf.ProtoFile != "" {
+		r.ProtoFile = GConf.ProtoFile
+	}
+	r.StreamPayload = GConf.StreamPayload
+	r.TLS = GConf.TLS
+}
+
 func removeEmptyStrings(s []string) []string {
 	var ss []string
 	for i := range s {

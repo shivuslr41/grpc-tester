@@ -1,0 +1,35 @@
+[
+    {
+        "tests": [
+            {
+                "id": "sayhello-2",
+                "description": "test hello world",
+                "requests": [
+                    {
+                        "name": "World"
+                    }
+                ],
+                "expectations": [
+                    {
+                        "message": "Hello World!"
+                    }
+                ]
+            },
+            {
+                "id": "sayhello-3",
+                "description": "test hello world with filters",
+                "requests": [
+                    {
+                        "name": "World"
+                    }
+                ],
+                "jqq": [
+                    "'[.[].message']"
+                ],
+                "expectations": [
+                    "Hello World!"
+                ]
+            }
+        ]
+    }
+]

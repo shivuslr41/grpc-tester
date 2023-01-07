@@ -107,7 +107,7 @@
             },
             {
                 "id": "sayhellostream-3",
-                "description": "test hello world and earth with filters, capture all stream messages in an \"messages\" array",
+                "description": "test hello world and earth with filters, capture all stream messages in \"messages\" array",
                 "requests": [
                     {
                         "name": "World"

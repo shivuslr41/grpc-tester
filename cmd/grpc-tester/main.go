@@ -19,6 +19,9 @@ var (
 	data          string
 	streamPayload bool
 	grpcurlFlags  string
+	compare       bool
+	print         bool
+	global        bool
 )
 
 func init() {
@@ -31,8 +34,11 @@ func init() {
 		flag.StringVarP(&jsonFile, "json", "j", "", "json file containing test scopes")
 		flag.BoolVarP(&help, "help", "h", false, "shows tool usage")
 		flag.StringVarP(&data, "data", "d", "", "request in json format - '{\"name\":\"Ramesh\"}'")
-		flag.BoolVarP(&streamPayload, "stream-payload", "m", false, "send multiple messages to server")
+		flag.BoolVarP(&streamPayload, "stream-payload", "S", false, "send multiple messages to server")
 		flag.StringVarP(&grpcurlFlags, "grpcurl-flags", "g", "", "pass additional grpcurl flags - '-H \"Authorization: <TOKEN>\"'")
+		flag.BoolVarP(&compare, "compare", "c", false, "test/compare responses")
+		flag.BoolVarP(&print, "print", "P", false, "prints result")
+		flag.BoolVarP(&global, "global", "G", false, "consider global flags for run/test commands")
 	}
 	flag.Parse()
 }
@@ -40,10 +46,10 @@ func init() {
 func usage() {
 	details := `
 FORMAT:
-	./tester [COMMAND] [FLAGS]
+	./grpc-tester [COMMAND] [FLAGS]
 
 EXAMPLE:
-	./tester list --server mygrpcserver:443 --tls
+	./grpc-tester list --server mygrpcserver:443 --tls
 
 COMMANDS:
 	gen		generates sample json.
@@ -87,6 +93,7 @@ func main() {
 			command = "test"
 		} else if data == "" {
 			fmt.Println("--data | -d data is given empty!")
+			fmt.Println("              OR")
 			fmt.Println("--json | -j json file is not provided!")
 			usage()
 		}
@@ -95,19 +102,27 @@ func main() {
 		usage()
 	}
 
-	// construct runner and tester
-	runner := &tester.Runner{
-		Lister:        *lister,
-		Endpoint:      endpoint,
-		StreamPayload: streamPayload,
-		GrpcurlFlags:  grpcurlFlags,
-	}
-	if data != "" {
-		runner.Data = append(runner.Data, data)
+	// config global flags
+	if global {
+		tester.GConf.Use = global
+		tester.GConf.Lister = *lister
+		tester.GConf.Endpoint = endpoint
+		tester.GConf.StreamPayload = streamPayload
+		tester.GConf.GrpcurlFlags = grpcurlFlags
+		tester.GConf.Compare = compare
+		tester.GConf.Print = print
 	}
 
 	switch command {
 	case "run":
+		// construct runner
+		runner := &tester.Runner{
+			Lister:        *lister,
+			Endpoint:      endpoint,
+			StreamPayload: streamPayload,
+			GrpcurlFlags:  grpcurlFlags,
+			Data:          append([]interface{}{}, data),
+		}
 		validateCommandOptions(runner)
 		runner.Execute()
 		return

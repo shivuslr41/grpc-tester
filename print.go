@@ -41,12 +41,14 @@ func (r *Runner) print() {
 }
 
 func (t *T) print() {
-	b, err := json.MarshalIndent(t, "", "  ")
-	if err != nil {
-		printErrAndExit(err)
+	if t.Print {
+		b, err := json.MarshalIndent(t, "", "  ")
+		if err != nil {
+			printErrAndExit(err)
+		}
+		fmt.Println(string(b))
 	}
-	fmt.Println(string(b))
-	if !t.Skip && t.Compare {
+	if t.Compare {
 		if t.Pass {
 			fmt.Println("PASS |", t.ID, "|", t.Description)
 		} else {

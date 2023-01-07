@@ -9,7 +9,15 @@ func (t *T) Test(r Runner) error {
 		return nil
 	}
 
-	r.testerCall = true
+	if GConf.Use {
+		if GConf.GrpcurlFlags != "" {
+			t.GrpcurlFlags = GConf.GrpcurlFlags
+		}
+		t.Compare = GConf.Compare
+		t.Print = GConf.Print
+	}
+
+	r.testerCall = !r.testerCall
 	r.Data = t.Requests
 	r.GrpcurlFlags = t.GrpcurlFlags
 
@@ -30,12 +38,9 @@ func (t *T) Test(r Runner) error {
 	}
 
 	if t.Compare {
-		return t.compare()
+		t.compare()
 	}
-
-	if t.Print {
-		t.print()
-	}
+	t.print()
 	return nil
 }
 

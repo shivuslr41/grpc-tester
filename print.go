@@ -22,7 +22,7 @@ func (l *Lister) print() {
 
 func (r *Runner) print() {
 	if err := r.Run(func(rc io.ReadCloser) error {
-		var out interface{}
+		var out any
 		decoder := json.NewDecoder(rc)
 		for decoder.More() {
 			if err := decoder.Decode(&out); err != nil {

@@ -5,9 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/shivuslr41/grpc-tester/jq"
 )
+
+const file = "variables.json"
+
+var variables = make(map[string]any)
 
 func (l *Lister) tlsFlag() string {
 	if l.TLS {
@@ -76,4 +81,23 @@ func (t *T) format(b []byte) error {
 		return err
 	}
 	return json.Unmarshal([]byte(str), &t.Response)
+}
+
+func load() error {
+	b, err := os.ReadFile(file)
+	if err != nil {
+		if strings.Contains(err.Error(), "no such file or directory") {
+			return nil
+		}
+		return err
+	}
+	return json.Unmarshal(b, &variables)
+}
+
+func save() error {
+	b, err := json.MarshalIndent(variables, "", " ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(file, b, 0644)
 }

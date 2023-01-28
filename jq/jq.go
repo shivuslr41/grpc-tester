@@ -56,3 +56,32 @@ func Compare(r, e string, o bool) (bool, error) {
 	}
 	return strconv.ParseBool(strings.Split(string(b), "\n")[0])
 }
+
+func Replace(o, q, d string) (string, error) {
+	b, err := exec.NewCMD(
+		fmt.Sprintf(
+			"echo '%s' | jq -rc '%s |= %s'",
+			o,
+			q,
+			d,
+		),
+	).CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("%s", string(b))
+	}
+	return string(b), nil
+}
+
+func Extract(o, q string) (string, error) {
+	b, err := exec.NewCMD(
+		fmt.Sprintf(
+			"echo '%s' | jq -rc '%s'",
+			o,
+			q,
+		),
+	).CombinedOutput()
+	if err != nil {
+		return "", fmt.Errorf("%s", string(b))
+	}
+	return string(b), nil
+}

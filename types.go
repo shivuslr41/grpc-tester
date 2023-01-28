@@ -9,10 +9,10 @@ type Lister struct {
 
 type Runner struct {
 	Lister
-	Endpoint      string        `json:"endpoint"`
-	Data          []interface{} `json:"-"`
-	GrpcurlFlags  string        `json:"-"`
-	StreamPayload bool          `json:"stream_payload"`
+	Endpoint      string `json:"endpoint"`
+	Data          []any  `json:"-"`
+	GrpcurlFlags  string `json:"-"`
+	StreamPayload bool   `json:"stream_payload"`
 	testerCall    bool
 }
 
@@ -22,16 +22,24 @@ type Endpoint struct {
 }
 
 type T struct {
-	ID           string        `json:"id"`
-	Description  string        `json:"description"`
-	Requests     []interface{} `json:"requests"`
-	Queries      []string      `json:"jqq"`
-	Compare      bool          `json:"compare"`
-	Expectations []interface{} `json:"expectations"`
-	Skip         bool          `json:"skip"`
-	Response     []interface{} `json:"-"`
-	Print        bool          `json:"print"`
-	GrpcurlFlags string        `json:"grpcurl_flags"`
-	IgnoreOrder  bool          `json:"ignore_order"`
-	Pass         bool          `json:"-"`
+	ID           string   `json:"id"`
+	Description  string   `json:"description"`
+	Requests     []any    `json:"requests"`
+	Queries      []string `json:"jqq"`
+	Compare      bool     `json:"compare"`
+	Expectations []any    `json:"expectations"`
+	Skip         bool     `json:"skip"`
+	Response     []any    `json:"-"`
+	Print        bool     `json:"print"`
+	GrpcurlFlags string   `json:"grpcurl_flags"`
+	IgnoreOrder  bool     `json:"ignore_order"`
+	Pass         bool     `json:"-"`
+	State
+}
+
+type State struct {
+	Replace     []string `json:"replace"`
+	ReplaceFrom []string `json:"replace_from"`
+	Extract     []string `json:"extract"`
+	ExtractTo   []string `json:"extract_to"`
 }

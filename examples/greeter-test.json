@@ -16,17 +16,23 @@
             },
             {
                 "id": "sayhello-2",
-                "description": "test hello world",
+                "description": "test hello earth and extract result",
                 "requests": [
                     {
-                        "name": "World"
+                        "name": "Earth"
                     }
                 ],
                 "compare": true,
                 "expectations": [
                     {
-                        "message": "Hello World!"
+                        "message": "Hello Earth!"
                     }
+                ],
+                "extract":[
+                    ".[0].message"
+                ],
+                "extract_to":[
+                    "name_from_another_request"
                 ]
             },
             {
@@ -107,13 +113,13 @@
             },
             {
                 "id": "sayhellostream-3",
-                "description": "test hello world and earth with filters, capture all stream messages in \"messages\" array",
+                "description": "test hello world and replace hello earth from extracted value along with filters, capture all stream messages in \"messages\" array",
                 "requests": [
                     {
                         "name": "World"
                     },
                     {
-                        "name": "Earth"
+                        "name": ""
                     }
                 ],
                 "compare": true,
@@ -124,9 +130,15 @@
                     {
                         "messages": [
                             "Hello World!",
-                            "Hello Earth!"
+                            "Hello Hello Earth!!"
                         ]
                     }
+                ],
+                "replace":[
+                    "(.[1] | select(.name == \"\")).name"
+                ],
+                "replace_from":[
+                    "name_from_another_request"
                 ]
             }
         ]

@@ -17,18 +17,24 @@ func (t *T) Test(r Runner) error {
 		t.Print = GConf.Print
 	}
 
+	var err error
+	if r.Data, err = t.replace(t.Requests); err != nil {
+		return err
+	}
 	r.testerCall = !r.testerCall
-	r.Data = t.Requests
 	r.GrpcurlFlags = t.GrpcurlFlags
 
-	err := r.Run(func(rc io.ReadCloser) error {
+	err = r.Run(func(rc io.ReadCloser) error {
 		b, err := io.ReadAll(rc)
 		if err != nil {
 			return err
 		}
 		// format response
-		err = t.format(b)
-		if err != nil {
+		if err = t.format(b); err != nil {
+			return err
+		}
+		// extract fields from response
+		if err = t.extract(t.Response); err != nil {
 			return err
 		}
 		return nil
@@ -54,9 +60,15 @@ func (e *Endpoint) test() error {
 }
 
 func Execute(endpoints []Endpoint) {
+	if err := load(); err != nil {
+		printErrAndExit(err)
+	}
 	for i := range endpoints {
 		if err := endpoints[i].test(); err != nil {
 			printErrAndExit(err)
 		}
+	}
+	if err := save(); err != nil {
+		printErrAndExit(err)
 	}
 }

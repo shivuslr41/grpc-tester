@@ -21,7 +21,7 @@ func readJSON(filename string) []tester.Endpoint {
 }
 
 // validate user options
-func validateCommandOptions(o interface{}) {
+func validateCommandOptions(o any) {
 	switch op := o.(type) {
 	case *tester.Lister:
 		if op.Server == "" && (op.ProtoPath == "" || op.ProtoFile == "") {

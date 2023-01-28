@@ -1,5 +1,6 @@
 # binaries
 /grpc-tester
 
-# format json
+# json files
 format.json
+variables.json

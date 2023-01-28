@@ -121,7 +121,7 @@ func main() {
 			Endpoint:      endpoint,
 			StreamPayload: streamPayload,
 			GrpcurlFlags:  grpcurlFlags,
-			Data:          append([]interface{}{}, data),
+			Data:          append([]any{}, data),
 		}
 		validateCommandOptions(runner)
 		runner.Execute()

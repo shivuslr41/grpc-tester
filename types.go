@@ -18,7 +18,8 @@ type Runner struct {
 
 type Endpoint struct {
 	Runner
-	Tests []T `json:"tests"`
+	Skip  bool `json:"skip"`
+	Tests []T  `json:"tests"`
 }
 
 type T struct {

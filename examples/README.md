@@ -1,5 +1,7 @@
 # Examples
 
+TODO: add details...
+
 G - use global flags. global flags overrides json properties if provided.
 
 c - compares

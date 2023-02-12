@@ -51,6 +51,9 @@ func (t *T) Test(r Runner) error {
 }
 
 func (e *Endpoint) test() error {
+	if e.Skip {
+		return nil
+	}
 	for i := range e.Tests {
 		if err := e.Tests[i].Test(e.Runner); err != nil {
 			return err

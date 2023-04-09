@@ -6,6 +6,10 @@ import (
 	"github.com/shivuslr41/grpc-tester/jq"
 )
 
+// compares the response from a request with the expected output using the jq package.
+// It filters the response data based on one or more queries provided by the user,
+// then compares the filtered data with the expected data using the Compare function from the jq package,
+// and sets the Pass flag accordingly.
 func (t *T) compare() error {
 	b, err := json.Marshal(t.Response)
 	if err != nil {

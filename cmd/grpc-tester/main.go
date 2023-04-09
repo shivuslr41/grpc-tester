@@ -127,6 +127,7 @@ func main() {
 		runner.Execute()
 		return
 	case "test":
+		// read data
 		endpoints := readJSON(jsonFile)
 		validateCommandOptions(endpoints)
 		tester.Execute(endpoints)

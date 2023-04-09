@@ -14,10 +14,12 @@ import (
 	greeterpb "github.com/shivuslr41/grpc-tester/examples/greeter/proto/greeter"
 )
 
+// server pb
 type server struct {
 	greeterpb.UnimplementedGreeterServer
 }
 
+// SayHello greets the client with provided name
 func (s *server) SayHello(ctx context.Context, in *greeterpb.HelloRequest) (*greeterpb.HelloReply, error) {
 	if in.GetName() == "" {
 		return nil, status.Errorf(codes.NotFound, "%s", "name not found")
@@ -25,6 +27,7 @@ func (s *server) SayHello(ctx context.Context, in *greeterpb.HelloRequest) (*gre
 	return &greeterpb.HelloReply{Message: "Hello " + in.GetName() + "!"}, nil
 }
 
+// SayHelloStream greets the client in streams
 func (s *server) SayHelloStream(in greeterpb.Greeter_SayHelloStreamServer) error {
 	for {
 		select {
@@ -54,6 +57,7 @@ func (s *server) SayHelloStream(in greeterpb.Greeter_SayHelloStreamServer) error
 	}
 }
 
+// start demo server
 func main() {
 	// Create a listener on TCP port
 	lis, err := net.Listen("tcp", ":8001")

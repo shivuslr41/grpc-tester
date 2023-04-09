@@ -8,6 +8,7 @@ import (
 	tester "github.com/shivuslr41/grpc-tester"
 )
 
+// read and unmarshal JSON data from a file into a slice of Endpoint objects.
 func readJSON(filename string) []tester.Endpoint {
 	b, err := os.ReadFile(filename)
 	if err != nil {
@@ -50,6 +51,7 @@ func validateCommandOptions(o any) {
 	}
 }
 
+// prints error and exit
 func printErrAndExit(err error) {
 	fmt.Print(err)
 	os.Exit(1)

@@ -1,5 +1,6 @@
 package tester
 
+// Lister stores List configurtions
 type Lister struct {
 	Server    string `json:"server"`
 	ProtoPath string `json:"proto_path"`
@@ -7,6 +8,7 @@ type Lister struct {
 	TLS       bool   `json:"tls"`
 }
 
+// Runner stores Run configurtions
 type Runner struct {
 	Lister
 	Endpoint      string `json:"endpoint"`
@@ -16,12 +18,14 @@ type Runner struct {
 	testerCall    bool
 }
 
+// Endpoint stores tests configurations of multiple endpoints
 type Endpoint struct {
 	Runner
 	Skip  bool `json:"skip"`
 	Tests []T  `json:"tests"`
 }
 
+// T stores multiple test case configurtions per endpoint
 type T struct {
 	ID           string   `json:"id"`
 	Description  string   `json:"description"`
@@ -38,6 +42,7 @@ type T struct {
 	State
 }
 
+// State stores variables(extracted data) state
 type State struct {
 	Replace     []string `json:"replace"`
 	ReplaceFrom []string `json:"replace_from"`

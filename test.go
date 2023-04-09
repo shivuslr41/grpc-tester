@@ -4,11 +4,14 @@ import (
 	"io"
 )
 
+// Test calls run to collect grpc result and compare them with expectations if set
 func (t *T) Test(r Runner) error {
+	// skips the test if set
 	if t.Skip {
 		return nil
 	}
 
+	// if global -G flag is set then override test file config
 	if GConf.Use {
 		if GConf.GrpcurlFlags != "" {
 			t.GrpcurlFlags = GConf.GrpcurlFlags
@@ -17,6 +20,7 @@ func (t *T) Test(r Runner) error {
 		t.Print = GConf.Print
 	}
 
+	// create grpc requests from extracted data
 	var err error
 	if r.Data, err = t.replace(t.Requests); err != nil {
 		return err
@@ -24,6 +28,9 @@ func (t *T) Test(r Runner) error {
 	r.testerCall = !r.testerCall
 	r.GrpcurlFlags = t.GrpcurlFlags
 
+	// start grpc requests and collect responses
+	// extract data from response if enabled
+	// note: all streaming results are collects as combined/one response and compared further
 	err = r.Run(func(rc io.ReadCloser) error {
 		b, err := io.ReadAll(rc)
 		if err != nil {
@@ -43,13 +50,17 @@ func (t *T) Test(r Runner) error {
 		return err
 	}
 
+	// compare the responses using jq
 	if t.Compare {
 		t.compare()
 	}
+
+	// print the test outcomes into console
 	t.print()
 	return nil
 }
 
+// test executes all test cases of an endpoint
 func (e *Endpoint) test() error {
 	if e.Skip {
 		return nil
@@ -62,7 +73,9 @@ func (e *Endpoint) test() error {
 	return nil
 }
 
+// Execute starts test command
 func Execute(endpoints []Endpoint) {
+	// load previous results from json file into variables map
 	if err := load(); err != nil {
 		printErrAndExit(err)
 	}
@@ -71,6 +84,7 @@ func Execute(endpoints []Endpoint) {
 			printErrAndExit(err)
 		}
 	}
+	// save current results from variables map into json file.
 	if err := save(); err != nil {
 		printErrAndExit(err)
 	}

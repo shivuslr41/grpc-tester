@@ -7,6 +7,8 @@ import (
 	"github.com/shivuslr41/grpc-tester/exec"
 )
 
+// List uses grpcurl to list all available gRPC services and methods on a server, either with or without TLS.
+// It returns a map of service names and their corresponding methods.
 func (l *Lister) List() (map[string][]string, error) {
 	var server string
 	if l.ProtoPath != "" {
@@ -42,6 +44,7 @@ func (l *Lister) List() (map[string][]string, error) {
 	return servicesAndMethods, nil
 }
 
+// Execute start list command
 func (l *Lister) Execute() {
 	l.print()
 }

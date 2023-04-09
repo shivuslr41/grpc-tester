@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+// The Generate function creates a sample JSON file with a pre-defined structure and writes it to a file named format.json.
+// The JSON file can be used as a starting point for creating test cases.
 func Generate() {
 	var sampleJSON []Endpoint
 	sampleJSON = append(sampleJSON, Endpoint{})

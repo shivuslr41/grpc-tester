@@ -10,10 +10,12 @@ import (
 	"github.com/shivuslr41/grpc-tester/jq"
 )
 
+// stores extracted data
 const file = "variables.json"
 
 var variables = make(map[string]any)
 
+// grpcurl tls configuration
 func (l *Lister) tlsFlag() string {
 	if l.TLS {
 		return ""
@@ -21,6 +23,7 @@ func (l *Lister) tlsFlag() string {
 	return "--plaintext"
 }
 
+// grpcurl proto files and path configuration
 func (l *Lister) protoFlag() string {
 	if l.ProtoPath != "" {
 		return fmt.Sprintf(
@@ -32,6 +35,7 @@ func (l *Lister) protoFlag() string {
 	return ""
 }
 
+// replaces file configs from global -G configs if provided
 func (r *Runner) replaceGconf() {
 	if GConf.Server != "" {
 		r.Server = GConf.Server
@@ -49,6 +53,7 @@ func (r *Runner) replaceGconf() {
 	r.TLS = GConf.TLS
 }
 
+// removes empty vals from slice
 func removeEmptyStrings(s []string) []string {
 	var ss []string
 	for i := range s {
@@ -59,6 +64,7 @@ func removeEmptyStrings(s []string) []string {
 	return ss
 }
 
+// reads stderr from pipe
 func readStdErr(rc io.ReadCloser) error {
 	b, err := io.ReadAll(rc)
 	if err != nil {
@@ -70,11 +76,13 @@ func readStdErr(rc io.ReadCloser) error {
 	return nil
 }
 
+// prints error and exits
 func printErrAndExit(err error) {
 	fmt.Print(err)
 	os.Exit(1)
 }
 
+// format JSON string into "jq" format
 func (t *T) format(b []byte) error {
 	str, err := jq.Format(string(b))
 	if err != nil {
@@ -83,6 +91,7 @@ func (t *T) format(b []byte) error {
 	return json.Unmarshal([]byte(str), &t.Response)
 }
 
+// load extracted data from variables.json file to variables map
 func load() error {
 	b, err := os.ReadFile(file)
 	if err != nil {
@@ -94,6 +103,7 @@ func load() error {
 	return json.Unmarshal(b, &variables)
 }
 
+// save extracted result data to variables.json file from variables map
 func save() error {
 	b, err := json.MarshalIndent(variables, "", " ")
 	if err != nil {

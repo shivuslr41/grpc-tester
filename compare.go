@@ -33,9 +33,9 @@ func (t *T) compare() error {
 		}
 	}
 
-	// TODO: print if debug enabled.
-	// fmt.Println(filteredResult)
-	// fmt.Println(expect)
+	// prints if debug enabled
+	print("Filtered result: " + filteredResult)
+	print("Expected result: " + expect)
 
 	t.Pass, err = jq.Compare(filteredResult, expect, t.IgnoreOrder)
 	return err

@@ -111,3 +111,10 @@ func save() error {
 	}
 	return os.WriteFile(file, b, 0644)
 }
+
+// print if debug is enabled
+func print(out ...any) {
+	if Debug {
+		fmt.Println(out...)
+	}
+}

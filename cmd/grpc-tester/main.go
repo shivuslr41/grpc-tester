@@ -22,6 +22,7 @@ var (
 	compare       bool
 	print         bool
 	global        bool
+	debug         bool
 )
 
 func init() {
@@ -39,6 +40,7 @@ func init() {
 		flag.BoolVarP(&compare, "compare", "c", false, "test/compare responses")
 		flag.BoolVarP(&print, "print", "P", false, "prints result")
 		flag.BoolVarP(&global, "global", "G", false, "consider global flags for run/test commands")
+		flag.BoolVarP(&debug, "debug", "D", false, "enable/disable debug logs")
 	}
 	flag.Parse()
 }
@@ -67,6 +69,9 @@ func main() {
 	if help {
 		usage()
 	}
+
+	// set debugging
+	tester.Debug = debug
 
 	// get command to exec
 	command := flag.Arg(0)

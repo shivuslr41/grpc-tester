@@ -13,3 +13,6 @@ type GConfig struct {
 	Compare       bool
 	Print         bool
 }
+
+// Debug
+var Debug bool

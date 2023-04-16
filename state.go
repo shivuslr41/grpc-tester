@@ -42,6 +42,8 @@ func (s *State) replace(req []any) ([]any, error) {
 	if err = json.Unmarshal([]byte(request), &req); err != nil {
 		return nil, err
 	}
+	// prints if debug enabled
+	print("Request:", req)
 	return req, nil
 }
 
@@ -72,6 +74,8 @@ func (s *State) extract(res []any) error {
 			), "\n", "",
 		)
 		variables[s.ExtractTo[i]] = str
+		// prints if debug enabled
+		print("Extracted:", str)
 	}
 	return nil
 }

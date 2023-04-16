@@ -1,4 +1,3 @@
-// maintain variables state for multiple runs.
 package tester
 
 import (

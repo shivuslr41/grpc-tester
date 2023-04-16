@@ -10,12 +10,13 @@ import (
 	"github.com/shivuslr41/grpc-tester/jq"
 )
 
-// stores extracted data
+// file to save extracted data
 const file = "variables.json"
 
+// variables store replacable/extarcted data
 var variables = make(map[string]any)
 
-// grpcurl tls configuration
+// tlsFlag sets grpcurl tls configuration
 func (l *Lister) tlsFlag() string {
 	if l.TLS {
 		return ""
@@ -23,7 +24,7 @@ func (l *Lister) tlsFlag() string {
 	return "--plaintext"
 }
 
-// grpcurl proto files and path configuration
+// protoFlag sets grpcurl proto files and path configuration
 func (l *Lister) protoFlag() string {
 	if l.ProtoPath != "" {
 		return fmt.Sprintf(
@@ -35,7 +36,7 @@ func (l *Lister) protoFlag() string {
 	return ""
 }
 
-// replaces file configs from global -G configs if provided
+// replaceGconf replaces file configs from global -G configs if provided
 func (r *Runner) replaceGconf() {
 	if GConf.Server != "" {
 		r.Server = GConf.Server
@@ -53,7 +54,7 @@ func (r *Runner) replaceGconf() {
 	r.TLS = GConf.TLS
 }
 
-// removes empty vals from slice
+// removeEmptyStrings removes empty vals from slice
 func removeEmptyStrings(s []string) []string {
 	var ss []string
 	for i := range s {
@@ -64,7 +65,7 @@ func removeEmptyStrings(s []string) []string {
 	return ss
 }
 
-// reads stderr from pipe
+// readStdErr reads stderr from pipe
 func readStdErr(rc io.ReadCloser) error {
 	b, err := io.ReadAll(rc)
 	if err != nil {
@@ -76,7 +77,7 @@ func readStdErr(rc io.ReadCloser) error {
 	return nil
 }
 
-// prints error and exits
+// printErrAndExit prints error and exits
 func printErrAndExit(err error) {
 	fmt.Print(err)
 	os.Exit(1)
@@ -112,7 +113,7 @@ func save() error {
 	return os.WriteFile(file, b, 0644)
 }
 
-// print if debug is enabled
+// print debug logs
 func print(out ...any) {
 	if Debug {
 		fmt.Println(out...)

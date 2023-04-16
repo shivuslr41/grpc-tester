@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-// prints all the available gRPC services and their methods to the console.
+// print all the available gRPC services and their methods to the console.
 func (l *Lister) print() {
 	sm, err := l.List()
 	if err != nil {
@@ -21,7 +21,7 @@ func (l *Lister) print() {
 	}
 }
 
-// prints all the responses from the grpc service via runner into the console.
+// print all the responses from the grpc service via runner into the console.
 func (r *Runner) print() {
 	if err := r.Run(func(rc io.ReadCloser) error {
 		var out any
@@ -42,7 +42,7 @@ func (r *Runner) print() {
 	}
 }
 
-// prints the expectation set from user and results from grpc server into the console.
+// print the expectation set from user and results from grpc server into the console.
 func (t *T) print() {
 	if t.Print {
 		b, err := json.MarshalIndent(t, "", "  ")
@@ -53,9 +53,9 @@ func (t *T) print() {
 	}
 	if t.Compare {
 		if t.Pass {
-			fmt.Println("PASS |", t.ID, "|", t.Description)
+			fmt.Println("PASS |", t.ID, "|", t.Description, "✔")
 		} else {
-			fmt.Println("FAIL |", t.ID, "|", t.Description)
+			fmt.Println("FAIL |", t.ID, "|", t.Description, "❌")
 		}
 	}
 	fmt.Println("                                   -----------------------------------")

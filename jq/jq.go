@@ -8,7 +8,7 @@ import (
 	"github.com/shivuslr41/grpc-tester/exec"
 )
 
-// format a JSON string using the "jq -s" command-line tool.
+// Format a JSON string using the "jq -s" command-line tool.
 func Format(j string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
@@ -22,7 +22,7 @@ func Format(j string) (string, error) {
 	return string(b), nil
 }
 
-// filter(select sub-objects) a JSON string using the "jq -c" command-line tool.
+// Filter (select sub-objects) a JSON string using the "jq -c" command-line tool.
 func Filter(j string, q string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
@@ -37,7 +37,7 @@ func Filter(j string, q string) (string, error) {
 	return string(b), nil
 }
 
-// compare two JSON strings using the "jq --argjson" command-line tool.
+// Compare two JSON strings using the "jq --argjson" command-line tool.
 func Compare(r, e string, o bool) (bool, error) {
 	var command string
 	// If the "o" flag is set to true, the function sorts any arrays within the JSON strings before comparing them
@@ -61,7 +61,7 @@ func Compare(r, e string, o bool) (bool, error) {
 	return strconv.ParseBool(strings.Split(string(b), "\n")[0])
 }
 
-// replace a portion of a JSON string using the "jq" command-line tool.
+// Replace a portion of a JSON string using the "jq" command-line tool.
 func Replace(o, q, d string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
@@ -77,7 +77,7 @@ func Replace(o, q, d string) (string, error) {
 	return string(b), nil
 }
 
-// extract(select sub-objects) a JSON string using the "jq -rc" command-line tool.
+// Extract (select sub-objects) a JSON string using the "jq -rc" command-line tool.
 // similar to filter function but this returns raw format of JSON string.
 func Extract(o, q string) (string, error) {
 	b, err := exec.NewCMD(

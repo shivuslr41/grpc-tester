@@ -1,6 +1,6 @@
 package tester
 
-// global configurations
+// GConf - global configurations
 var GConf = GConfig{}
 
 // GConfig stores configurations that overrides test file configs
@@ -14,5 +14,5 @@ type GConfig struct {
 	Print         bool
 }
 
-// Debug
+// Debug for logs
 var Debug bool

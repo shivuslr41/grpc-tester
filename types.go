@@ -34,7 +34,7 @@ type T struct {
 	Compare      bool     `json:"compare"`
 	Expectations []any    `json:"expectations"`
 	Skip         bool     `json:"skip"`
-	Response     []any    `json:"-"`
+	Response     []any    `json:"response"`
 	Print        bool     `json:"print"`
 	GrpcurlFlags string   `json:"grpcurl_flags"`
 	IgnoreOrder  bool     `json:"ignore_order"`

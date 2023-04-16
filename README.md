@@ -153,4 +153,4 @@ grpc-tester test -j examples/greeter-test.json
 - [karate-grpc](https://github.com/pecker-io/karate-grpc)
 
 ## Support the project!
-Please give a ⭐️ if you like the project! It draws more attention to the project, which helps us improve it even faster.
+If you like the project, consider giving a ⭐️! It draws more attention to the project, which helps us improve it even faster.

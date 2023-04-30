@@ -14,7 +14,7 @@ NOTE: Doesn't work on windows cmd/powershell.
 
 ### Install From Source
 ```shell
-go install github.com/shivuslr41/grpc-tester/cmd/grpc-tester@v0.1.0-beta
+go install github.com/shivuslr41/grpc-tester/cmd/grpc-tester
 ```
 
 ## Usage

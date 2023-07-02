@@ -16,3 +16,6 @@ type GConfig struct {
 
 // Debug for logs
 var Debug bool
+
+// Store overall test pass/fail state
+var overallFail bool

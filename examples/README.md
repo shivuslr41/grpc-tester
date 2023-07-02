@@ -16,19 +16,19 @@ Use `-G` to enable global options. Available global flags are:
 
 **NOTE**: keep an eye on global boolean flags *-t, -S, -c* and *-P*, using -G make these options `false` by default. To make better use of -G option, plan test files accordingly. Having one endpoint tests per file is recommended.
 
-Some examples of using -G on [sayhello.json](./sayhello.json)
+Some examples of using -G on [global-flags-test.json](./global-flags-test.json)
 
 ### Compare:
 By providing `-c` option, by defalut tester compares all the test cases from the file on the expectations set. if expectations were not set then those test fails!
 ```shell
-./grpc-tester test -j examples/sayhello.json -s localhost:8001 -e greeter.Greeter.SayHello -Gc
+./grpc-tester test -j examples/global-flags-test.json -s localhost:8001 -e greeter.Greeter.SayHello -Gc
 ```
 Here `-Gc` represents, override all the test cases compare property to be true.
 
 ### Print:
 Similar to global compare(-c), using `-P` option overrides print property from the json file on all test cases.
 ```shell
-./grpc-tester test -j examples/sayhello.json -s localhost:8001 -e greeter.Greeter.SayHello -GP
+./grpc-tester test -j examples/global-flags-test.json -s localhost:8001 -e greeter.Greeter.SayHello -GP
 ```
 Since `-c` is not provided, comparing responses with expectations is ignored.
 

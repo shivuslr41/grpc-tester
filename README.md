@@ -1,4 +1,7 @@
 # grpc-tester
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/shivuslr41/grpc-tester.svg)](https://pkg.go.dev/github.com/shivuslr41/grpc-tester)
+
 `grpc-tester` is a simple go-lib and command-line tool for testing gRPC services.
 
 ## Introduction

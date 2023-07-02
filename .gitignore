@@ -1,5 +1,7 @@
 # binaries
 /grpc-tester
+/examples/greeter/greeter
+/greeter
 
 # json files
 format.json

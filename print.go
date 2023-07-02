@@ -56,6 +56,7 @@ func (t *T) print() {
 			fmt.Println("PASS |", t.ID, "|", t.Description, "✔")
 		} else {
 			fmt.Println("FAIL |", t.ID, "|", t.Description, "❌")
+			overallFail = true
 		}
 	}
 	fmt.Println("                                   -----------------------------------")

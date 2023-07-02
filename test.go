@@ -1,7 +1,12 @@
 package tester
 
 import (
+	"errors"
 	"io"
+)
+
+const (
+	ErrTestsFailed = " ❌some tests failed!❌ "
 )
 
 // Test calls run to collect grpc result and compare them with expectations if set
@@ -87,5 +92,12 @@ func Execute(endpoints []Endpoint) {
 	// save current results from variables map into json file.
 	if err := save(); err != nil {
 		printErrAndExit(err)
+	}
+
+	// check if overall test is passed or failed,
+	// if any one test failed then exit with code 1
+	// hence making overall tests failed.
+	if overallFail {
+		printErrAndExit(errors.New(ErrTestsFailed))
 	}
 }

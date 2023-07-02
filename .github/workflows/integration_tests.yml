@@ -1,0 +1,32 @@
+name: Integration Tests
+
+on:
+  push:
+    branches:
+      - main
+      - '*_test_*'
+  pull_request:
+    branches:
+      - main
+      - "*_test_*"
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+
+      - name: Install dependencies
+        run: sudo apt-get install -y jq
+        run: go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+        run: go mod download
+
+      - name: Run integration tests
+        run: make ci

@@ -1,6 +1,6 @@
 [
     {
-        "server": "localhost:8001",
+        "server": "localhost:8333",
         "endpoint": "greeter.Greeter.SayHello",
         "tests": [
             {
@@ -72,7 +72,7 @@
         ]
     },
     {
-        "server": "localhost:8001",
+        "server": "localhost:8333",
         "endpoint": "greeter.Greeter.SayHelloStream",
         "stream_payload": true,
         "tests": [

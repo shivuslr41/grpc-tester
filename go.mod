@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	github.com/spf13/pflag v1.0.6
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.12.0
 	google.golang.org/grpc v1.63.2
 	google.golang.org/protobuf v1.36.6
 )

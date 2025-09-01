@@ -3,7 +3,7 @@ module github.com/shivuslr41/grpc-tester
 go 1.24
 
 require (
-	github.com/spf13/pflag v1.0.6
+	github.com/spf13/pflag v1.0.8
 	golang.org/x/sync v0.12.0
 	google.golang.org/grpc v1.71.0
 	google.golang.org/protobuf v1.36.6

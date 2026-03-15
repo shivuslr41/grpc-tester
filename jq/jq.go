@@ -8,12 +8,18 @@ import (
 	"github.com/shivuslr41/grpc-tester/exec"
 )
 
+// shellSingleQuote returns a shell-safe single-quoted representation of s.
+// It uses the POSIX pattern: 'foo'\''bar' to embed single quotes.
+func shellSingleQuote(s string) string {
+	return "'" + strings.ReplaceAll(s, "'", `'\''`) + "'"
+}
+
 // Format a JSON string using the "jq -s" command-line tool.
 func Format(j string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
-			"echo '%s' | jq -s '.'",
-			j,
+			"echo %s | jq -s '.'",
+			shellSingleQuote(j),
 		),
 	).CombinedOutput()
 	if err != nil {
@@ -26,9 +32,9 @@ func Format(j string) (string, error) {
 func Filter(j string, q string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
-			"echo '%s' | jq -c %s",
-			j,
-			q,
+			"echo %s | jq -c %s",
+			shellSingleQuote(j),
+			shellSingleQuote(q),
 		),
 	).CombinedOutput()
 	if err != nil {
@@ -43,15 +49,15 @@ func Compare(r, e string, o bool) (bool, error) {
 	// If the "o" flag is set to true, the function sorts any arrays within the JSON strings before comparing them
 	if o {
 		command = fmt.Sprintf(
-			"jq --argjson a '%s' --argjson b '%s' -n '($a | (.. | arrays) |= sort) as $a | ($b | (.. | arrays) |= sort) as $b | $a == $b'",
-			r,
-			e,
+			"jq --argjson a %s --argjson b %s -n '($a | (.. | arrays) |= sort) as $a | ($b | (.. | arrays) |= sort) as $b | $a == $b'",
+			shellSingleQuote(r),
+			shellSingleQuote(e),
 		)
 	} else {
 		command = fmt.Sprintf(
-			"jq --argjson a '%s' --argjson b '%s' -n '($a == $b)'",
-			r,
-			e,
+			"jq --argjson a %s --argjson b %s -n '($a == $b)'",
+			shellSingleQuote(r),
+			shellSingleQuote(e),
 		)
 	}
 	b, err := exec.NewCMD(command).CombinedOutput()
@@ -65,10 +71,9 @@ func Compare(r, e string, o bool) (bool, error) {
 func Replace(o, q, d string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
-			"echo '%s' | jq -rc '%s |= %s'",
-			o,
-			q,
-			d,
+			"echo %s | jq -rc %s",
+			shellSingleQuote(o),
+			shellSingleQuote(fmt.Sprintf("%s |= %s", q, d)),
 		),
 	).CombinedOutput()
 	if err != nil {
@@ -82,9 +87,9 @@ func Replace(o, q, d string) (string, error) {
 func Extract(o, q string) (string, error) {
 	b, err := exec.NewCMD(
 		fmt.Sprintf(
-			"echo '%s' | jq -rc '%s'",
-			o,
-			q,
+			"echo %s | jq -rc %s",
+			shellSingleQuote(o),
+			shellSingleQuote(q),
 		),
 	).CombinedOutput()
 	if err != nil {

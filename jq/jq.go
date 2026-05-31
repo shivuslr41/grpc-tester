@@ -34,7 +34,7 @@ func Filter(j string, q string) (string, error) {
 		fmt.Sprintf(
 			"echo %s | jq -c %s",
 			shellSingleQuote(j),
-			shellSingleQuote(q),
+			q,
 		),
 	).CombinedOutput()
 	if err != nil {
@@ -89,7 +89,7 @@ func Extract(o, q string) (string, error) {
 		fmt.Sprintf(
 			"echo %s | jq -rc %s",
 			shellSingleQuote(o),
-			shellSingleQuote(q),
+			q,
 		),
 	).CombinedOutput()
 	if err != nil {
